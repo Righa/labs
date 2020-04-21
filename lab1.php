@@ -35,12 +35,20 @@ if (isset($_POST['btn-save'])) {
 		<div><input type="text" name="city_name" placeholder="city name..."></div>
 		<div><button type="submit" name="btn-save"><strong>SAVE</strong></button></div>
 	</form>
+	<table>
 	<?php 
 
 	$users = new User(null,null,null);
-	$users->readAll();
-	$con->closeDatabase();
+
+	$users = $users->readAll();
+
+	while ($user = $users->fetch_assoc()) {
+		echo "<tr><td>".$user['id']."</td><td>".$user['first_name']."</td><td>".$user['last_name']."</td><td>".$user['user_city']."</td></tr>";
+	}
+	
 
 	 ?>
+	 	
+	</table>
 </body>
 </html>

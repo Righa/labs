@@ -32,11 +32,11 @@ class User implements Crud
 	public function readAll() {
 		$con = new DBConnector();
 		$users = mysqli_query($con->conn, "SELECT * FROM user") or die("Error: ".$con->error);
-		echo "<table>";
-		while ($user = $users->fetch_assoc()) {
-			echo "<tr><td>".$user['id']."</td><td>".$user['first_name']."</td><td>".$user['last_name']."</td><td>".$user['user_city']."</td></tr>";
-		}
-		echo "</table>";
+		
+		$con->closeDatabase();
+		
+		return $users;
+
 	}
 	public function readUnique() {
 		return null;
