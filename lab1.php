@@ -37,8 +37,8 @@ if (isset($_POST['btn-save'])) {
 	</form>
 	<?php 
 
-	$user = new User(null,null,null);
-	$user->readAll();
+	$users = new User(null,null,null);
+	$users->readAll();
 	$con->closeDatabase();
 
 	 ?>
