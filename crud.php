@@ -8,6 +8,12 @@ interface Crud{
 	public function update();
 	public function removeOne();
 	public function removeAll();
+
+	#lab 2
+
+	public function ValidateForm();
+	public function createFormErrorSessions($problem);
+	public function isUserExist();
 }
 
 

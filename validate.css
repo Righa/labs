@@ -1,0 +1,9 @@
+#form-errors{
+	color: red;
+}
+#users-tab{
+	background-color: black;
+}
+#users-tab th,td{
+	background-color: white;
+}
