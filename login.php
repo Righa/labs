@@ -12,13 +12,14 @@ if (isset($_POST['btn-login'])) {
 	$instance = User::create();
 	$instance->setPassword($password);
 	$instance->setUsername($username);
+
 	if ($instance->isPasswordCorrect()) {
 		$instance->login();
 		$con->closeDatabase();
 		$instance->createUserSession();
-	}else{
+	} else {
+		$instance->createFormErrorSessions("Username or password is incorrect");
 		$con->closeDatabase();
-		header("location:login.php");
 	}
 }
 
@@ -29,12 +30,12 @@ if (isset($_POST['btn-login'])) {
 <head>
 	<title></title>
 	<script type="text/javascript" src="validate.js"></script>
+	<link rel="stylesheet" type="text/css" href="validate.css">
 </head>
 <body>
 	<form method="post" id="user_details" name="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">
 		<div id="form-errors">
 			<?php 
-			session_start();
 			if (!empty($_SESSION['form_errors'])) {
 				echo " ". $_SESSION['form_errors'];
 				unset($_SESSION['form_errors']);

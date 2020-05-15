@@ -6,4 +6,12 @@
 }
 #users-tab th,td{
 	background-color: white;
+	padding: 11px;
+}
+#user_details div,#user_details input, #user_details button{
+	padding: 11px;
+}
+#profile_pic{
+	width: 44px;
+	height: 44px;
 }

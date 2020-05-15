@@ -2,27 +2,44 @@
 
 include_once 'DBConnector.php';
 include_once 'user.php';
-include_once 'FileUploader.php';
+include_once 'fileUploader.php';
 
 $con = new DBConnector;
 
 if (isset($_POST['btn-save'])) {
 	$first_name = $_POST['first_name'];
 	$last_name = $_POST['last_name'];
-	$city = $_POST['city_name'];
+	$city_name = $_POST['city_name'];
 	$username = $_POST['username'];
 	$password = $_POST['password'];
+
 	$file_size = $_FILES["fileToUpload"]["size"];
+	$target_directory = "uploads/";
 	$file_original_name = $_FILES["fileToUpload"]["name"];
 	$file_temp_name = $_FILES["fileToUpload"]["tmp_name"];
 
-	$uploader = new FileUploader($file_original_name,$file_temp_name,$file_size);
+	$uploader = new FileUploader($file_temp_name);
+	$user = new User;
 
-	$file_upload_response = $uploader->uploadFile();
-
+	$uploader->setOriginalName($file_original_name);
+	$uploader->setFileSize($file_size);
+	$uploader->setFinalFileName($target_directory.basename($file_original_name));
 	$pic = $uploader->getFinalFileName();
+	$uploader->setFileType(strtolower(pathinfo($pic,PATHINFO_EXTENSION)));
 
-	$user = new User($first_name,$last_name,$city,$username,$password,$pic);
+	$uploader->fileWasSelected();
+	$uploader->fileAlreadyExists();
+	$uploader->fileTypeIsCorrect();
+	$uploader->fileSizeIsCorrect();
+
+	$user->setFirstName($first_name);
+	$user->setLastName($last_name);
+	$user->setCityName($city_name);
+	$user->setUserName($username);
+	$user->setPassword($password);
+	$user->setProfilePic($pic);
+
+
 
 	if (!$user->validateForm()) {
 		$user->createFormErrorSessions('All fields are required');
@@ -36,13 +53,20 @@ if (isset($_POST['btn-save'])) {
 		die();
 	}
 
+	if (!$uploader->uploadFile()) {
+		$user->createFormErrorSessions('File not uploaded');
+		header("Refresh:0");
+		die();
+	}
+
 	$res = $user->save();
 
 
-	if ($res/* && $file_upload_response*/) {
+	if ($res) {
 		echo "Save operation was successful";
-	}else{
+	} else {
 		echo "An error occured!";
+		unlink($pic);
 	}
 }
 
@@ -72,9 +96,7 @@ if (isset($_POST['btn-save'])) {
 		<div><input type="text" name="city_name" placeholder="city name..."></div>
 		<div><input type="text" name="username" placeholder="user name..."></div>
 		<div><input type="password" name="password" placeholder="password..."></div>
-		<div>
-			<label for="fileToUpload">Profile image:</label><input type="file" name="fileToUpload" id="fileToUpload">
-		</div>
+		<div><label for="fileToUpload">Profile image:</label><input type="file" name="fileToUpload" id="fileToUpload"></div>
 		<div><button type="submit" name="btn-save"><strong>SAVE</strong></button></div>
 		<div><a href="login.php">Login</a></div>
 	</form>
@@ -82,7 +104,7 @@ if (isset($_POST['btn-save'])) {
 		<tr><th>ID</th><th>USERNAME</th><th>FIRST NAME</th><th>LAST NAME</th><th>CITY</th><th>PIC</th></tr>
 	<?php 
 
-	$users = new User(null,null,null,null,null,null);
+	$users = new User;
 
 	$users = $users->readAll();
 

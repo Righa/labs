@@ -11,47 +11,68 @@ class User implements Crud,Authenticator
 	private $first_name;
 	private $last_name;
 	private $city_name;
-
-	# $args func_get_args();
-	# call_user_func_array(array($this, 'parent::__construct'), $args);
-
 	private $username;
 	private $password;
 
-	function __construct($first_name,$last_name,$city_name,$username,$password)
+
+	public function setFirstName($first_name)
 	{
 		$this->first_name = $first_name;
+	}
+	public function getFirstName()
+	{
+		return $this->first_name;
+	}
+
+	public function setLastName($last_name)
+	{
 		$this->last_name = $last_name;
+	}
+	public function getLastName()
+	{
+		return $this->last_name;
+	}
+
+	public function setCityName($city_name)
+	{
 		$this->city_name = $city_name;
+	}
+	public function getCityName()
+	{
+		return $this->city_name;
+	}
+
+	public function setUserName($username)
+	{
 		$this->username = $username;
-		$this->password = $password;
+	}
+	public function getUserName()
+	{
+		return $this->username;
+	}
+
+	public function setProfilePic($pic)
+	{
+		$this->pic = $pic;
+	}
+	public function getProfilePic()
+	{
+		return $this->pic;
 	}
 
 	public function setUserId($user_id)
 	{
 		$this->user_id = $user_id;
 	}
-
 	public function getUserId()
 	{
 		return $this->user_id;
-	}
-
-	public function setUsername($username)
-	{
-		$this->username = $username;
-	}
-
-	public function getUsername()
-	{
-		return $this->username;
 	}
 
 	public function setPassword($password)
 	{
 		$this->password = $password;
 	}
-
 	public function getPassword()
 	{
 		return $this->password;
@@ -59,9 +80,16 @@ class User implements Crud,Authenticator
 
 	public static function create()
 	{
-		$instance = new self(null,null,null,null,null);
+		$instance = new self;
 		return $instance;
 	}
+
+
+
+
+
+
+
 
 	public function save()
 	{
@@ -72,7 +100,8 @@ class User implements Crud,Authenticator
 		$uname = $this->username;
 		$this->hashPassword();
 		$pass = $this->password;
-		$res = mysqli_query($con->conn, "INSERT INTO user(first_name,last_name,user_city,username,password) VALUES('$fn','$ln','$city','$uname','$pass')") or die("Error: ".$con->error);
+		$pic = $this->pic;
+		$res = mysqli_query($con->conn, "INSERT INTO user(first_name,last_name,user_city,username,password,profile_pic) VALUES('$fn','$ln','$city','$uname','$pass','$pic')") or die("Error: ".$con->error);
 		return $res;
 	}
 
@@ -115,7 +144,7 @@ class User implements Crud,Authenticator
 		$con->closeDatabase();
 
 		while ($row = $res->fetch_assoc()) {
-			if ($this->getUsername() == $row['username']) {
+			if ($this->username == $row['username']) {
 				return true;
 			}
 		}
@@ -154,7 +183,7 @@ class User implements Crud,Authenticator
 		$res = mysqli_query($con->conn, "SELECT * FROM user") or die("Error: ".$con->conn->error);
 
 		while ($row = $res->fetch_assoc()) {
-			if (password_verify($this->getPassword(), $row['password']) && $this->getUsername() == $row['username']) {
+			if (password_verify($this->password, $row['password']) && $this->username == $row['username']) {
 				$found = true;
 			}
 		}
@@ -173,7 +202,7 @@ class User implements Crud,Authenticator
 	public function createUserSession()
 	{
 		session_start();
-		$_SESSION['username'] = $this->getUsername();
+		$_SESSION['username'] = $this->username;
 	}
 
 	public function logout()

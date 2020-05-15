@@ -5,20 +5,17 @@
  */
 class FileUploader
 {
-	private static $target_directory = "uploads/";
 	private static $size_limit = 50000;
-	private $uploadOk = false;
+	private $uploadOk = true;
 	private $file_original_name;
 	private $file_temp_name;
 	private $file_type;
 	private $file_size;
 	private $final_file_name;
 
-	function __construct($file_original_name,$file_temp_name,$file_size)
+	function __construct($file_temp_name)
 	{
-		$this->file_original_name = $file_original_name;
 		$this->file_temp_name = $file_temp_name;
-		$this->file_size = $file_size;
 	}
 
 	public function setOriginalName($name)
@@ -60,19 +57,17 @@ class FileUploader
 
 	public function uploadFile()
 	{
-		$this->setFinalFileName($this::$target_directory.basename($this->file_original_name));
-
-		if ($this->fileTypeIsCorrect() && $this->fileSizeIsCorrect() && !$this->fileAlreadyExists()) {
-			if (move_uploaded_file($this->file_temp_name, $this->getFinalFileName())) {
+		if ($this->uploadOk) {
+			if (move_uploaded_file($this->file_temp_name, $this->final_file_name)) {
     			return true;
-  			} 
-		} 
+  			}
+		}
 		return false;
 	}
 	public function fileAlreadyExists()
 	{
-		if (file_exists($this->getFinalFileName())) {
- 			return true;
+		if (file_exists($this->final_file_name)) {
+  			$this->uploadOk = false;
 		}
 	}
 	public function saveFilePathTo()
@@ -85,30 +80,33 @@ class FileUploader
 	}
 	public function fileTypeIsCorrect()
 	{
-		$file_type = strtolower(pathinfo($this->getFinalFileName(),PATHINFO_EXTENSION));
+		$file_type = $this->file_type;
 
 		// Check if image file is a actual image or fake image
 		if($file_type != "jpg" && $file_type != "png" && $file_type != "jpeg" && $file_type != "gif" )
-			return false;
+			$this->uploadOk = false;
 		//format
 		$check = getimagesize($this->file_temp_name);
 		
 		if($check !== false) {
 			return true;
   		} else {
-  			return false;
+  			$this->uploadOk = false;
   		}
 	}
 	public function fileSizeIsCorrect()
 	{
 		if ($this->file_size > $this::$size_limit) {
- 			return false;
+  			$this->uploadOk = false;
 		}
 		return true;
 	}
 	public function fileWasSelected()
 	{
-		# code...
+		if (!is_null($this->file_original_name)) {
+			return true;
+		}
+  		$this->uploadOk = false;
 	}
 }
 
