@@ -31,6 +31,8 @@ if (isset($_POST['btn-login'])) {
 	<title></title>
 	<script type="text/javascript" src="validate.js"></script>
 	<link rel="stylesheet" type="text/css" href="validate.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="timezone.js"></script>
 </head>
 <body>
 	<form method="post" id="user_details" name="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">

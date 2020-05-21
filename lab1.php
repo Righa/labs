@@ -10,8 +10,12 @@ if (isset($_POST['btn-save'])) {
 	$first_name = $_POST['first_name'];
 	$last_name = $_POST['last_name'];
 	$city_name = $_POST['city_name'];
+
 	$username = $_POST['username'];
 	$password = $_POST['password'];
+
+	$utc_timestamp = $_POST['utc_timestamp'];
+	$offset = $_POST['time_zone_offset'];
 
 	$file_size = $_FILES["fileToUpload"]["size"];
 	$target_directory = "uploads/";
@@ -38,6 +42,9 @@ if (isset($_POST['btn-save'])) {
 	$user->setUserName($username);
 	$user->setPassword($password);
 	$user->setProfilePic($pic);
+
+	$user->setUtcTimestamp($utc_timestamp);
+	$user->setTimeZoneOffset($offset);
 
 
 
@@ -79,6 +86,8 @@ if (isset($_POST['btn-save'])) {
 	<title>lab1</title>
 	<script type="text/javascript" src="validate.js"></script>
 	<link rel="stylesheet" type="text/css" href="validate.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script type="text/javascript" src="timezone.js"></script>
 </head>
 <body>
 	<form enctype="multipart/form-data" method="post" id="user_details" name="user_details" onsubmit="return validateForm()" action="<?=$_SERVER['PHP_SELF']?>">
@@ -91,6 +100,8 @@ if (isset($_POST['btn-save'])) {
 			}
 			 ?>
 		</div>
+		<input type="hidden" name="utc_timestamp" id="utc_timestamp" value="">
+		<input type="hidden" name="time_zone_offset" id="time_zone_offset" value="">
 		<div><input type="text" name="first_name" placeholder="first name..."></div>
 		<div><input type="text" name="last_name" placeholder="last name..."></div>
 		<div><input type="text" name="city_name" placeholder="city name..."></div>
@@ -101,7 +112,7 @@ if (isset($_POST['btn-save'])) {
 		<div><a href="login.php">Login</a></div>
 	</form>
 	<table id="users-tab">
-		<tr><th>ID</th><th>USERNAME</th><th>FIRST NAME</th><th>LAST NAME</th><th>CITY</th><th>PIC</th></tr>
+		<tr><th>ID</th><th>USERNAME</th><th>FIRST NAME</th><th>LAST NAME</th><th>CITY</th><th>UTC TIMESTAMP</th><th>ZONE OFFSET</th><th>PIC</th></tr>
 	<?php 
 
 	$users = new User;
@@ -109,7 +120,7 @@ if (isset($_POST['btn-save'])) {
 	$users = $users->readAll();
 
 	while ($user = $users->fetch_assoc()) {
-		echo "<tr><td>".$user['id']."</td><td>".$user['username']."</td><td>".$user['first_name']."</td><td>".$user['last_name']."</td><td>".$user['user_city']."</td><td><img id='profile_pic' src='".$user['profile_pic']."'></td></tr>";
+		echo "<tr><td>".$user['id']."</td><td>".$user['username']."</td><td>".$user['first_name']."</td><td>".$user['last_name']."</td><td>".$user['user_city']."</td><td>".$user['user_utc_timestamp']."</td><td>".$user['user_offset']."</td><td><img id='profile_pic' src='".$user['profile_pic']."'></td></tr>";
 	}
 	
 

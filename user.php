@@ -13,6 +13,8 @@ class User implements Crud,Authenticator
 	private $city_name;
 	private $username;
 	private $password;
+	private $offset;
+	private $utc_timestamp;
 
 
 	public function setFirstName($first_name)
@@ -69,6 +71,24 @@ class User implements Crud,Authenticator
 		return $this->user_id;
 	}
 
+	public function setUtcTimestamp($utc_timestamp)
+	{
+		$this->utc_timestamp = $utc_timestamp;
+	}
+	public function getUtcTimestamp()
+	{
+		return $this->utc_timestamp;
+	}
+
+	public function setTimeZoneOffset($offset)
+	{
+		$this->offset = $offset;
+	}
+	public function getTimeZoneOffset()
+	{
+		return $this->offset;
+	}
+
 	public function setPassword($password)
 	{
 		$this->password = $password;
@@ -101,7 +121,9 @@ class User implements Crud,Authenticator
 		$this->hashPassword();
 		$pass = $this->password;
 		$pic = $this->pic;
-		$res = mysqli_query($con->conn, "INSERT INTO user(first_name,last_name,user_city,username,password,profile_pic) VALUES('$fn','$ln','$city','$uname','$pass','$pic')") or die("Error: ".$con->error);
+		$user_utc = $this->utc_timestamp;
+		$offset = $this->offset;
+		$res = mysqli_query($con->conn, "INSERT INTO user(first_name,last_name,user_city,username,password,profile_pic,user_utc_timestamp,user_offset) VALUES('$fn','$ln','$city','$uname','$pass','$pic','$user_utc','$offset')") or die("Error: ".$con->error);
 		return $res;
 	}
 

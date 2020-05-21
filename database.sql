@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2020 at 12:03 AM
+-- Generation Time: May 21, 2020 at 04:23 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.3
 
@@ -33,18 +33,20 @@ CREATE TABLE `user` (
   `first_name` varchar(32) NOT NULL,
   `last_name` varchar(32) DEFAULT NULL,
   `user_city` varchar(32) DEFAULT NULL,
-  `username` varchar(20) DEFAULT NULL,
+  `username` varchar(44) DEFAULT NULL,
   `password` text,
-  `profile_pic` varchar(444) NOT NULL
+  `profile_pic` varchar(444) NOT NULL,
+  `user_utc_timestamp` varchar(222) NOT NULL,
+  `user_offset` int(22) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `first_name`, `last_name`, `user_city`, `username`, `password`, `profile_pic`) VALUES
-(34, 'lawrence', 'righa', 'ukunda', 'lawrencierigha@gmail', '$2y$10$JZx1pTf/.Sbry66yZMal0uwKv1pZp6i987c16GGCBmTYYU0rowjJS', 'uploads/star.png'),
-(35, 'lawrence', 'righa', 'ukunda', 'lawrencierigha@gmail', '$2y$10$n81ZKNDNb6FwQ4oyDrDqlOt.oY2vNl/DOgqbUHha2SJUBvI1MpQ1G', 'uploads/Screenshot_20200321-123412.png');
+INSERT INTO `user` (`id`, `first_name`, `last_name`, `user_city`, `username`, `password`, `profile_pic`, `user_utc_timestamp`, `user_offset`) VALUES
+(8, 'lawrence', 'righa', 'ukunda', '111525', '$2y$10$2mXp5RjzR8p1gCBkDNeeqejxyp2cLxQfDOKPxtZU.vtZYggo9B7LG', 'uploads/star.png', '1590056170217', -180),
+(9, 'lawrence', 'righa', 'ukunda', 'lawrencierigha@gmail.com', '$2y$10$l6tcEKzE9fjkKIxp6p93We1yl26uHLSwcl.JRLdhGMTBdChHF3HxS', 'uploads/papismall.png', '1590057315083', -180);
 
 --
 -- Indexes for dumped tables
@@ -64,7 +66,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
