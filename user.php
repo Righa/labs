@@ -113,7 +113,7 @@ class User implements Crud,Authenticator
 
 	public function save()
 	{
-		$con = new DBConnector();
+		$con = new DBConnector;
 		$fn = $this->first_name;
 		$ln = $this->last_name;
 		$city = $this->city_name;
