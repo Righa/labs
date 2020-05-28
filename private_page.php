@@ -13,7 +13,7 @@ function fetchUserApiKey()
 	$myquery = mysqli_query($dbcon->conn, "SELECT * FROM user WHERE username='$user'");
 	$user_array = $myquery->fetch_assoc();
 	$uid = $user_array['id'];
-	$good = mysqli_query($dbcon->conn, "SELECT * FROM api_keys WHERE user_id = '$uid'") or die(mysqli_error($dbcon->conn));
+	$good = mysqli_query($dbcon->conn, "SELECT * FROM api_keys WHERE user_id = '$uid' ORDER BY `api_keys`.`id` DESC") or die(mysqli_error($dbcon->conn));
 	$key = $good->fetch_assoc();
 	return $key['api_key'];
 }
