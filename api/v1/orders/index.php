@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$api_key_correct = false;
 	$headers = apache_request_headers();
 	$header_api_key = $headers['Authorization'];
+	$api->setUserApiKey($header_api_key);
 	$api_key_correct = $api->checkApiKey();
 
 	if ($api_key_correct) {
@@ -19,14 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		$con = new DBConnector();
 
-		$api->setMealName();
-		$api->setMealUnits();
-		$api->setUnitPrice();
-		$api->setStatus();
+		$api->setMealName($name_of_food);
+		$api->setMealUnits($number_of_units);
+		$api->setUnitPrice($unit_price);
+		$api->setStatus($order_status);
 		$res = $api->createOrder();
-		
+
 		if ($res) {
-			$response_array = ['success' => 1, 'message' => 'Order has been placed'];
+			$response_array = ['success' => 0, 'message' => 'Order has been placed'];
 			header('Content-Type: application/json; charset=UTF-8');
 			echo json_encode($response_array);
 		}
@@ -38,7 +39,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 }elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-	# code...
+	$api_key_correct = false;
+	$headers = apache_request_headers();
+	$header_api_key = $headers['Authorization'];
+	$api->setUserApiKey($header_api_key);
+	$api_key_correct = $api->checkApiKey();
+
+	if ($api_key_correct) {
+		$order_id = $_GET['order_id'];
+
+		$oStatus = $api->checkOrderStatus($order_id);
+
+		$response_array = ['success' => 0, 'message' => $oStatus ];
+		header('Content-Type: application/json; charset=UTF-8');
+		echo json_encode($response_array);
+
+	}else {
+		$response_array = ['success' => 0, 'message' => 'Wrong API key'];
+		header('Content-Type: application/json; charset=UTF-8');
+		echo json_encode($response_array);
+	}
 }else {
 	# code...
 }
