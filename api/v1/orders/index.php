@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$res = $api->createOrder();
 
 		if ($res) {
-			$response_array = ['success' => 0, 'message' => 'Order has been placed'];
+			$response_array = ['success' => 1, 'message' => 'Order has been placed'];
 			header('Content-Type: application/json; charset=UTF-8');
 			echo json_encode($response_array);
 		}
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 		$oStatus = $api->checkOrderStatus($order_id);
 
-		$response_array = ['success' => 0, 'message' => $oStatus ];
+		$response_array = ['success' => 1, 'message' => $oStatus ];
 		header('Content-Type: application/json; charset=UTF-8');
 		echo json_encode($response_array);
 
